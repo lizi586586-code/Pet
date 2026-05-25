@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyBuddy AI Pet</title>
+<link rel="stylesheet" href="css/ai_pet.css">
+</head>
+<body>
+
+<div class="phone-frame">
+
+  <!-- Pet Area -->
+  <div class="pet-area">
+
+    <!-- Status bar -->
+    <div class="status-bar">
+      <div class="status-left">
+        <span>22:41</span>
+      </div>
+      <div class="status-online">
+        <span class="online-text">Online</span>
+        <div class="online-bars">
+          <div class="bar-long"></div>
+          <div class="bar-short"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pet info: name + mood -->
+    <div class="pet-info">
+      <div class="pet-info-right" style="margin-left:auto;">
+        <button class="memories-entry-btn" id="memoriesEntryBtn" title="时光成长记">📖</button>
+        <span class="pet-state-badge" id="petStateBadge">💤 默认</span>
+        <button class="mood-toggle-btn" id="moodToggleBtn" title="心情日记" style="display:none;">📅</button>
+        <span class="pet-mood" id="petMood">😊 心情 85</span>
+      </div>
+    </div>
+
+    <!-- Core stage: fixed-size container -->
+    <div class="pet-stage">
+      <div class="pet-stage-inner" id="petStage">
+        <div class="welcome-bubble" id="welcomeBubble">我会乖乖等你回来～今天也要好好加油哦</div>
+        <img src="ttyaotou.gif" class="pet-image pet-active" id="petImage" title="点击和我互动">
+        <img src="tthello.gif" class="pet-image pet-idle" id="petVideo">
+      </div>
+    </div>
+
+    <!-- AI Response Bubble (direct child of pet-area, avoids overflow clipping) -->
+    <div class="ai-response-bubble" id="aiResponseBubble"><span class="ai-response-text" id="aiResponseText"></span></div>
+
+  </div>
+
+  <!-- Hidden chat messages (used by JS for message history) -->
+  <div class="chat-messages" id="chatMessages" style="display:none;"></div>
+
+  <!-- Mood Panel (hidden by default) -->
+  <div class="mood-panel" id="moodPanel" style="display:none;">
+    <div class="mood-header">
+      <button class="mood-month-nav" id="moodPrev">‹</button>
+      <span class="mood-month-title" id="moodMonthTitle">2025年10月</span>
+      <button class="mood-month-nav" id="moodNext">›</button>
+    </div>
+    <div class="mood-calendar">
+      <div class="mood-weekdays">
+        <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+      </div>
+      <div class="mood-dates" id="moodDates"></div>
+    </div>
+    <div class="mood-chart-section">
+      <div class="mood-chart-title">📊 本周心情</div>
+      <div class="mood-chart" id="moodChart"></div>
+      <div class="mood-chart-labels">
+        <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+      </div>
+    </div>
+    <div class="mood-log-section">
+      <div class="mood-log-title">心情记录</div>
+      <div class="mood-log-list" id="moodLogList"></div>
+    </div>
+  </div>
+
+  <!-- Bottom input bar -->
+  <div class="bottom-bar">
+    <div class="action-bar">
+      <button class="action-btn" data-action="feed">
+        <span class="action-icon"><img src="../UI/feedicon.png" alt="喂养" style="width:100%;height:100%;object-fit:cover;"></span>
+      </button>
+      <button class="action-btn" data-action="sleep">
+        <span class="action-icon"><img src="../UI/sleepicon.png" alt="睡觉" style="width:100%;height:100%;object-fit:cover;"></span>
+      </button>
+      <button class="action-btn" data-action="play">
+        <span class="action-icon"><img src="../UI/playicon.png" alt="玩耍" style="width:100%;height:100%;object-fit:cover;"></span>
+      </button>
+    </div>
+    <div class="chat-input-row">
+      <div class="chat-input-wrap">
+        <button id="plusBtn">＋</button>
+        <input type="text" id="chatInput" placeholder="和它说点什么…" autocomplete="off">
+        <button class="send-btn" id="sendBtn">↑</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Memories Drawer -->
+  <div class="memories-overlay" id="memoriesOverlay">
+    <div class="memories-drawer" id="memoriesDrawer">
+      <div class="memories-header">
+        <h2 class="memories-title">成长时光记</h2>
+        <button class="memories-close-btn" id="memoriesCloseBtn">✕</button>
+      </div>
+      <div class="memories-content">
+        <div class="memories-wall">
+
+          <div class="mem-item mem-sticky-pink">
+            <div class="mem-pin"></div>
+            <p>今天主人带我去了公园，草地好软，疯狂打滚真开心！</p>
+            <span class="mem-author">🐾 桃桃</span>
+            <span class="mem-date">2023-05-20</span>
+            <div class="mem-attach"><span>[日记] 阳光明媚的下午</span><img src="../UI/memory_park.jpg" alt="park"></div>
+          </div>
+
+          <div class="mem-item mem-sticky-yellow">
+            <p>主人今天好像有点难过，我就默默趴在她脚边陪着她。没关系的，桃桃会一直在这里保护你汪～</p>
+            <span class="mem-author">守护主人的桃桃</span>
+            <span class="mem-date">08-15</span>
+          </div>
+
+          <div class="mem-item mem-polaroid">
+            <div class="mem-polaroid-img"><img src="../UI/hezhao.png" alt="hezhao"></div>
+            <p>参加主人的入学典礼，我的主人好厉害啊。</p>
+            <span class="mem-author">骄傲的桃桃</span>
+            <span class="mem-date">10-01</span>
+          </div>
+
+          <div class="mem-item mem-note-white">
+            <p>喜欢主人的新拖鞋，咬感非常好，下次还要咬！😈</p>
+          </div>
+
+          <div class="mem-item mem-photo-center">
+            <img src="../UI/memory_sleepy_corgi.jpg" alt="sleepy corgi">
+          </div>
+
+          <div class="mem-item mem-sticky-blue">
+            <p>要是再随地大小便<br>我就是小狗汪！</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Video Player Modal -->
+  <div class="video-overlay" id="videoOverlay">
+    <div class="video-drawer" id="videoDrawer">
+      <div class="video-header">
+        <div class="video-header-info">
+          <h3 class="video-title">陪在你身边的桃桃</h3>
+          <p class="video-meta">08-15 | 守护主人的桃桃</p>
+        </div>
+        <button class="video-close-btn" id="videoCloseBtn">✕</button>
+      </div>
+      <div class="video-body">
+        <div class="video-player-wrap">
+          <video
+            id="memoryVideo"
+            class="video-player"
+            controls
+            playsInline
+          >
+            <source src="../UI/emo.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="video-quote">"主人难过的时候，我就安安静静陪着她。桃桃不用说话，只要在她身边就好汪～🐾"</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/ai_pet.js?v=7"></script>
+
+</body>
+</html>

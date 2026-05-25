@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Pet — 登录</title>
+<link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+<div class="login-card">
+
+  <!-- Brand -->
+  <div class="brand">
+    <div class="brand-icon">🐶</div>
+    <div class="brand-name">Pet</div>
+  </div>
+
+  <!-- Username -->
+  <div class="form-group">
+    <label class="form-label" for="usernameInput">用户名</label>
+    <div class="input-wrap">
+      <input type="text" id="usernameInput" placeholder="请输入用户名" autocomplete="username">
+    </div>
+    <div class="error-text" id="usernameError"></div>
+  </div>
+
+  <!-- Password -->
+  <div class="form-group">
+    <label class="form-label" for="passwordInput">密码</label>
+    <div class="input-wrap">
+      <input type="password" id="passwordInput" placeholder="请输入密码" autocomplete="current-password">
+      <button class="input-suffix" id="togglePwd" type="button" title="显示密码">👁</button>
+    </div>
+    <div class="error-text" id="pwdError"></div>
+  </div>
+
+  <!-- Login Button -->
+  <button class="login-btn" id="loginBtn" type="button" disabled>
+    <span class="login-spinner"></span>
+    <span class="login-text">登 录</span>
+  </button>
+
+  <!-- Footer -->
+  <div class="login-footer">
+    还没有账号？<span>立即注册</span>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="js/login.js"></script>
+
+</body>
+</html>
