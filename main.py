@@ -30,8 +30,9 @@ app = FastAPI(
     description="studybuddy接口服务",
     version=__version__
 )
-# 确保数据库目录存在
+# 确保数据库目录存在并初始化表结构
 os.makedirs("dbs/user_dbs", exist_ok=True)
+users.init_db()
 
 # 直接加这段，解决所有 OPTIONS 405
 app.add_middleware(

@@ -11,6 +11,22 @@ import json
 from configs import configs
 
 
+def init_db():
+    """初始化全局数据库表"""
+    os.makedirs(os.path.dirname(configs.GLOBAL_DB), exist_ok=True)
+    conn = sqlite3.connect(configs.GLOBAL_DB)
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password_hash TEXT NOT NULL,
+            tmp_token TEXT
+        )
+    """)
+    conn.commit()
+    conn.close()
+
 #用户登录
 def login(username: str, password: str):
     try:
