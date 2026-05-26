@@ -30,6 +30,9 @@ app = FastAPI(
     description="studybuddy接口服务",
     version=__version__
 )
+# 确保数据库目录存在
+os.makedirs("dbs/user_dbs", exist_ok=True)
+
 # 直接加这段，解决所有 OPTIONS 405
 app.add_middleware(
     CORSMiddleware,
@@ -53,6 +56,10 @@ async def auth_middleware(request: Request, call_next):
         # 未登录 → 重定向到登录页
         return RedirectResponse(url="/pet/login.html", status_code=302)
     return await call_next(request)
+
+@app.get("/")
+async def root():
+    return RedirectResponse(url="/pet/login.html")
 
 # 托管静态文件
 app.mount("/pet", StaticFiles(directory="pet", html=True), name="pet")

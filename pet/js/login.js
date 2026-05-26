@@ -12,10 +12,9 @@
   var loading = false;
   var maskTimer = null;
 
-  //var API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  //  ? 'http://' + window.location.hostname + ':8000'
-  //  : '';
-  var API_BASE ='http://localhost:8000';
+  var API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://' + window.location.hostname + ':8000'
+    : '';
   
   // ── Username validation ──
   function validateUsername(value) {
